@@ -5,7 +5,7 @@ export type Product = {
   price: number;
 };
 
-export type PizzaSize = 'Mala' | 'Malo Veca' | 'Velka' | 'Najveca';
+export type PizzaSize = 'Mala' | 'Srednja' | 'Velka' | 'Najveca';
 
 export type CartItem = {
   id: string;

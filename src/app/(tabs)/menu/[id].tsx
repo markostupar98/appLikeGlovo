@@ -3,19 +3,27 @@ import React, { useState } from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
 import products from "@assets/data/products";
 import Button from "@/components/Button";
+import { useCart } from "@/app/providers/CartProvider";
+import { PizzaSize } from "@/types";
 
 // Product details page
 
 // Sizes
-const sizes = ["Mala", "Srednja", "Velka", "Najveca"];
+const sizes:PizzaSize[] = ["Mala", "Srednja", "Velka", "Najveca"];
 
 const ProductDetail = () => {
+  // ID
   const { id } = useLocalSearchParams();
   const product = products.find((p) => p.id.toString() === id);
-  const [selectedSize, setSelectedSize] = useState("Velka");
+  const [selectedSize, setSelectedSize] = useState<PizzaSize>("Velka");
+
+// Add cart item context function
+const {addItem} = useCart()
 
   const addToCart = () => {
+    if(!product) return;
     console.log('Adding to cart')
+    addItem(product, selectedSize)
   }
 
   if (!product) {
