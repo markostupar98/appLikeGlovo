@@ -54,12 +54,12 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <CartProvider>
+      <CartProvider>
+        <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="cart" options={{ presentation: "modal" }} />
-        </CartProvider>
-      </Stack>
+        </Stack>
+      </CartProvider>
     </ThemeProvider>
   );
 }
