@@ -1,10 +1,12 @@
 import { View, Text, Image, Pressable } from "react-native";
 import React, { useState } from "react";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import products from "@assets/data/products";
 import Button from "@/components/Button";
 import { useCart } from "@/app/providers/CartProvider";
 import { PizzaSize } from "@/types";
+import { FontAwesome } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
 
 // Product details page
 
@@ -35,18 +37,33 @@ const ProductDetail = () => {
   }
   return (
     <View className="bg-white flex-1 p-3">
+      <Stack.Screen
+        options={{
+          title: "Menu",
+          headerRight: () => (
+            <Link href={`/(admin)/menu/create?id=${id}`} asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <FontAwesome
+                    name="pencil"
+                    size={25}
+                    color={Colors.light.tint}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+            </Link>
+          ),
+        }}
+      />
       <Stack.Screen options={{ title: product?.name }} />
       <Image
         className="w-full aspect-square"
         source={{ uri: product.image || undefined }}
       />
-    
-      <Text className="text-xl font-semibold ml-2">
-        ${product?.price}
-      </Text>
-      <Text className="text-xl font-semibold ml-2 mt-2">
-        {product?.name}
-      </Text>
+
+      <Text className="text-xl font-semibold ml-2">${product?.price}</Text>
+      <Text className="text-xl font-semibold ml-2 mt-2">{product?.name}</Text>
     </View>
   );
 };
