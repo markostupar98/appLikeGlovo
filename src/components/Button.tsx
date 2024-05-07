@@ -9,7 +9,7 @@ type ButtonProps = {
 const Button = forwardRef<View | null, ButtonProps>(
   ({ text, ...pressableProps }, ref) => {
     return (
-      <Pressable ref={ref} {...pressableProps} className='bg-sky-300 p-5 items-center rounded-full my-3'>
+      <Pressable ref={ref} {...pressableProps} className='bg-sky-300 p-3 items-center rounded-full my-3'>
         <Text className='text-xl font-semibold text-white'>{text}</Text>
       </Pressable>
     );
