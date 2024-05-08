@@ -12,7 +12,7 @@ export default function OrderDetailsScreen() {
     return <Text>No orders found</Text>;
   }
   return (
-    <View className="p-3 gap-5">
+    <View className="p-3 gap-5 flex-1">
       <Stack.Screen options={{ title: `Order #${id}` }} />
       <OrderList order={order} />
       <FlatList
