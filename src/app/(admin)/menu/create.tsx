@@ -1,31 +1,49 @@
 import { View, Text, TextInput, Image, Alert } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 
 // Icons
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Button from "@/components/Button";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useCreateProduct } from "@/api/products";
+import {
+  useCreateProduct,
+  useProductById,
+  useUpdateProduct,
+} from "@/api/products";
 
 // Create product screen
 
 const CreateProduct = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const router = useRouter()
-
-  const { id } = useLocalSearchParams();
-  const isUpdating = !!id;
-
-  // Error State
   const [errors, setErrors] = useState("");
+  const [image, setImage] = useState<string | null>(null);
+  const router = useRouter();
+
+  const { id: idString } = useLocalSearchParams();
+  const id = parseFloat(
+    typeof idString === "string" ? idString : idString?.[0]
+  );
+  const isUpdating = !!idString;
+  // Error State
 
   //Image picker state
-  const [image, setImage] = useState<string | null>(null);
 
   // Create product fn
-  const {mutate:createProduct} = useCreateProduct()
+  const { mutate: createProduct } = useCreateProduct();
+  // Update product fn
+  const { mutate: updateProduct } = useUpdateProduct();
+  // Get product by id
+  const { data: updatingProduct } = useProductById(id);
+
+  useEffect(() => {
+    if (updatingProduct) {
+      setName(updatingProduct.name);
+      setPrice(updatingProduct.price.toString());
+      setImage(updatingProduct.image);
+    }
+  }, [updatingProduct]);
 
   // Image picker function
   const pickImage = async () => {
@@ -72,13 +90,15 @@ const CreateProduct = () => {
       return;
     }
     console.log("Create product");
-    createProduct({name, price:parseFloat(price), image},{
-      onSuccess:()=>{
-        resetFields()
-        router.back()
+    createProduct(
+      { name, price: parseFloat(price), image },
+      {
+        onSuccess: () => {
+          resetFields();
+          router.back();
+        },
       }
-    })
-    resetFields();
+    );
   };
 
   // Update product function
@@ -87,14 +107,23 @@ const CreateProduct = () => {
     if (!validateInput()) {
       return;
     }
-    console.log("Create product");
-    resetFields();
+    updateProduct(
+      { id, name, price: parseFloat(price), image },
+      {
+        onSuccess: () => {
+          resetFields();
+          router.back();
+        },
+      }
+    );
   };
 
   // Submit func
   const onSubmit = () => {
     if (isUpdating) {
+      // update
       onUpdate();
+      console.log("Updating");
     } else {
       onCreate();
     }
@@ -142,7 +171,6 @@ const CreateProduct = () => {
         placeholder="Name"
         className="bg-white p-3 rounded-lg my-3"
       />
-
       <Text className="text-gray-400 text-xl">Price ($)</Text>
       <TextInput
         value={price}
@@ -157,8 +185,7 @@ const CreateProduct = () => {
           <Text className="text-rose-400 ml-1.5">{errors}!</Text>
         </View>
       )}
-
-      <Button text={isUpdating ? "Update" : "Create"} onPress={onSubmit} />
+      <Button onPress={onSubmit} text={isUpdating ? "Update" : "Create"} />
       {isUpdating && (
         <Text
           onPress={confirmDelete}
