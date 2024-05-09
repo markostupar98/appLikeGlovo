@@ -8,6 +8,7 @@ import Button from "@/components/Button";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import {
   useCreateProduct,
+  useDeleteProduct,
   useProductById,
   useUpdateProduct,
 } from "@/api/products";
@@ -36,6 +37,8 @@ const CreateProduct = () => {
   const { mutate: updateProduct } = useUpdateProduct();
   // Get product by id
   const { data: updatingProduct } = useProductById(id);
+  // Deleting product
+  const { mutate: deleteProduct } = useDeleteProduct();
 
   useEffect(() => {
     if (updatingProduct) {
@@ -129,6 +132,16 @@ const CreateProduct = () => {
     }
   };
 
+  // Delete func
+  const onDelete = () => {
+    deleteProduct(id, {
+      onSuccess: () => {
+        resetFields();
+        router.replace("/(admin)/menu");
+      },
+    });
+  };
+
   // Delete confirmation
   const confirmDelete = () => {
     Alert.alert("Confirm", "Are you sure you want to delete this product", [
@@ -143,8 +156,6 @@ const CreateProduct = () => {
     ]);
   };
 
-  // Delete func
-  const onDelete = () => {};
   return (
     <View className="flex-1 justify-center p-3">
       <Stack.Screen
