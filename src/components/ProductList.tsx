@@ -13,7 +13,7 @@ const ProductList = ({ product }: ProductListProps) => {
   console.log(segments)
   return (
     <Link className="text-muted-foreground" href={`/${segments[0]}/menu/${product.id}`} asChild >
-    <Pressable className="items-center bg-white p-5 rounded-lg flex-1 m-5 ">
+    <Pressable className="items-center bg-white p-5 rounded-lg flex-1">
       <Image
         source={{ uri: product.image || undefined }}
         className="w-full aspect-square"
