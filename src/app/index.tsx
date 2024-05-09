@@ -14,7 +14,7 @@ const index = () => {
     return <ActivityIndicator />
   }
   if(!isAdmin){
-    return <Redirect href={"/(user)"} />;
+    return <Redirect href={"/(user)/menu"} />;
   }
   return (
     <View className="flex-1 justify-center p-2">

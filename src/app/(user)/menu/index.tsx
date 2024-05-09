@@ -7,6 +7,8 @@ import {
   View,
 } from "react-native";
 import { useProductList } from "@/api/products";
+import Button from "@/components/Button";
+import { supabase } from "@/lib/supabase";
 
 export default function MenuScreen() {
   
@@ -19,6 +21,7 @@ export default function MenuScreen() {
     return <Text>Failed to get products</Text>;
   }
   return (
+    <> 
     <FlatList
       data={products}
       renderItem={({ item }) => <ProductList product={item} />}
@@ -26,5 +29,7 @@ export default function MenuScreen() {
       contentContainerStyle={{ gap: 10, padding: 10 }}
       columnWrapperStyle={{ gap: 10 }}
     />
+    <Button text="signout" onPress={()=>supabase.auth.signOut()} />
+    </>
   );
 }

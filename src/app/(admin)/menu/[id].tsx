@@ -7,6 +7,7 @@ import { useCart } from "@/app/providers/CartProvider";
 import { PizzaSize } from "@/types";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
+import { useProductById } from "@/api/products";
 
 // Product details page
 
@@ -14,11 +15,15 @@ import Colors from "@/constants/Colors";
 const sizes: PizzaSize[] = ["Mala", "Srednja", "Velka", "Najveca"];
 
 const ProductDetail = () => {
-  // ID
-  const { id } = useLocalSearchParams();
+
+  const { id: idString } = useLocalSearchParams();
+  const id = parseFloat(typeof idString === "string" ? idString : idString[0]);
+  // Fetching
+  const { data: product, error, isLoading } = useProductById(id);
   const router = useRouter();
-  const product = products.find((p) => p.id.toString() === id);
   const [selectedSize, setSelectedSize] = useState<PizzaSize>("Velka");
+
+  // ID
 
   // Add cart item context function
   const { addItem } = useCart();

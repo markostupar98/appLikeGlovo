@@ -5,13 +5,15 @@ import * as ImagePicker from "expo-image-picker";
 // Icons
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Button from "@/components/Button";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { useCreateProduct } from "@/api/products";
 
 // Create product screen
 
 const CreateProduct = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const router = useRouter()
 
   const { id } = useLocalSearchParams();
   const isUpdating = !!id;
@@ -21,6 +23,9 @@ const CreateProduct = () => {
 
   //Image picker state
   const [image, setImage] = useState<string | null>(null);
+
+  // Create product fn
+  const {mutate:createProduct} = useCreateProduct()
 
   // Image picker function
   const pickImage = async () => {
@@ -67,6 +72,12 @@ const CreateProduct = () => {
       return;
     }
     console.log("Create product");
+    createProduct({name, price:parseFloat(price), image},{
+      onSuccess:()=>{
+        resetFields()
+        router.back()
+      }
+    })
     resetFields();
   };
 
