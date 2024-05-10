@@ -20,6 +20,7 @@ export default function OrderDetailsScreen() {
   const { data: order, isLoading, error } = useOrderById(id);
   const {mutate:updateOrder} = useUpdateOrder()
 
+
   // Update order status
   const updateOrderStatus = (status)=>{
 updateOrder({id:id,updatedFields:{status}})
