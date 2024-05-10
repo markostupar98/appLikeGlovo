@@ -1,7 +1,7 @@
 import { useAuth } from "@/app/providers/AuthProvider";
 import { supabase } from "@/lib/supabase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { InsertTables } from "@/types";
+import { InsertTables, UpdateTables } from "@/types";
 // Get all orders
 export const useAdminOrderList = ({ archived = false }) => {
   const statuses = archived
@@ -13,7 +13,8 @@ export const useAdminOrderList = ({ archived = false }) => {
       const { data, error } = await supabase
         .from("orders")
         .select("*")
-        .in("status", statuses);
+        .in("status", statuses)
+        .order("created_at", { ascending: false });
       if (error) {
         throw new Error(error.message);
       }
@@ -36,6 +37,7 @@ export const useMyOrderList = () => {
         .from("orders")
         .select("*")
         .eq("user_id", id)
+        .order("created_at", { ascending: false })
         .single();
       if (error) {
         throw new Error(error.message);
@@ -52,7 +54,7 @@ export const useOrderById = (id: number) => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("orders")
-        .select("*")
+        .select("*,order_items(*, products(*))")
         .eq("id", id)
         .single();
       if (error) {
@@ -71,20 +73,51 @@ export const useInsertOrder = () => {
   const userId = session?.user.id;
 
   return useMutation({
-    async mutationFn(data: InsertTables<'orders'>) {
+    async mutationFn(data: InsertTables<"orders">) {
       const { error, data: newProduct } = await supabase
-        .from('orders')
+        .from("orders")
         .insert({ ...data, user_id: userId })
         .select()
         .single();
 
-      if (error){
+      if (error) {
         throw new Error(error.message);
       }
       return newProduct;
     },
     async onSuccess() {
-      await queryClient.invalidateQueries(['orders']);
+      await queryClient.invalidateQueries(["orders"]);
+    },
+  });
+};
+
+// Update order
+export const useUpdateOrder = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    async mutationFn({
+      id,
+      updatedFields,
+    }: {
+      id: number;
+      updatedFields: UpdateTables<"orders">;
+    }) {
+      const { error, data: updatedOrder } = await supabase
+        .from("orders")
+        .update(updatedFields)
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (error) {
+        throw new Error(error.message);
+      }
+      return updatedOrder;
+    },
+    async onSuccess(_, { id }) {
+      await queryClient.invalidateQueries(["orders"]);
+      await queryClient.invalidateQueries(["orders", id]);
     },
   });
 };

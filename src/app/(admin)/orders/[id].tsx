@@ -11,13 +11,19 @@ import {
   View,
 } from "react-native";
 import Colors from "@/constants/Colors";
-import { useOrderById } from "@/api/orders";
+import { useOrderById, useUpdateOrder } from "@/api/orders";
 
 export default function OrderDetailsScreen() {
   const { id: idString } = useLocalSearchParams();
   const id = parseFloat(typeof idString === "string" ? idString : idString[0]);
   // const order = orders.find((order) => order.id.toString() === id);
   const { data: order, isLoading, error } = useOrderById(id);
+  const {mutate:updateOrder} = useUpdateOrder()
+
+  // Update order status
+  const updateOrderStatus = (status)=>{
+updateOrder({id:id,updatedFields:{status}})
+  }
 
   if (isLoading) {
     return <ActivityIndicator />;
@@ -30,7 +36,7 @@ export default function OrderDetailsScreen() {
       <Stack.Screen options={{ title: `Order #${id}` }} />
       <OrderList order={order} />
       <FlatList
-        data={order}
+        data={order.order_items}
         renderItem={({ item }) => <OrderItemList item={item} />}
         contentContainerStyle={{ gap: 10 }}
         ListHeaderComponent={() => <OrderList order={order} />}
@@ -41,7 +47,7 @@ export default function OrderDetailsScreen() {
               {OrderStatusList.map((status) => (
                 <Pressable
                   key={status}
-                  // onPress={() => updateStatus(status)}
+                  onPress={() => updateOrderStatus(status)}
                   className="border-2 border-sky-500 p-3 rounded-lg my-2"
                   style={{
                     backgroundColor:
