@@ -1,11 +1,10 @@
 import { View, Text, Image, Pressable } from "react-native";
 import React from "react";
-import products from "assets/data/products";
-import { Product } from "../types";
 import { Link, useSegments } from "expo-router";
+import { Tables } from "@/database.types";
 
 type ProductListProps = {
-  product: Product;
+  product: Tables<'products'>;
 };
 
 const ProductList = ({ product }: ProductListProps) => {

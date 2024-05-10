@@ -1,6 +1,9 @@
-import { CartItem, Product } from "@/types";
+import { CartItem } from "@/types";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { randomUUID } from "expo-crypto";
+import { Tables } from "@/database.types";
+
+type Product = Tables<"products">;
 
 // Defiing cart type
 type CartType = {
@@ -54,7 +57,10 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     setItems(updatedItems);
   };
 
-  const total = items.reduce((sum, item) => (sum += item.product.price * item.quantity),0);
+  const total = items.reduce(
+    (sum, item) => (sum += item.product.price * item.quantity),
+    0
+  );
 
   return (
     <CartContext.Provider value={{ items, addItem, updateQuantity, total }}>

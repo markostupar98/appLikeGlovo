@@ -166,7 +166,7 @@ const CreateProduct = () => {
         source={{
           uri:
             image ||
-            "https://as2.ftcdn.net/v2/jpg/04/81/13/43/1000_F_481134373_0W4kg2yKeBRHNEklk4F9UXtGHdub3tYk.jpg",
+            "https://www.recipesfromeurope.com/wp-content/uploads/2023/04/balkan-cevapi-recipe.jpg",
         }}
       />
       <Text

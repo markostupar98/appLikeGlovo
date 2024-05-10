@@ -64,7 +64,7 @@ const ProductDetail = () => {
       <Stack.Screen options={{ title: product?.name }} />
       <Image
         className="w-full aspect-square"
-        source={{ uri: product.image || undefined }}
+        source={{ uri: product.image || 'https://www.recipesfromeurope.com/wp-content/uploads/2023/04/balkan-cevapi-recipe.jpg' }}
       />
 
       <Text className="text-xl font-semibold ml-2">${product?.price}</Text>
