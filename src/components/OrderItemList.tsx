@@ -2,21 +2,20 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
 import Colors from "../constants/Colors";
 import { OrderItem, Tables } from "../types";
+import RemoteImage from "./RemoteImage";
+import { defaultImage } from "./ProductList";
 // import { defaultPizzaImage } from './ProductList';
 
 type OrderItemListProps = {
-  item: {products:Tables<'products'>} & Tables<'order_items'>;
+  item: { products: Tables<"products"> } & Tables<"order_items">;
 };
 
 const OrderItemList = ({ item }: OrderItemListProps) => {
   return (
     <View className="bg-white rounded-lg p-2 flex-row items-center">
-      <Image
-        source={{
-          uri:
-            item.products.image ||
-            "https://www.foodiesfeed.com/wp-content/uploads/2023/06/burger-with-melted-cheese.jpg",
-        }}
+      <RemoteImage
+        path={item.products.image}
+        fallback={defaultImage}
         resizeMode="contain"
         className="w-14 aspect-square self-center mr-3"
       />

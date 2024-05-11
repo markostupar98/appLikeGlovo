@@ -4,6 +4,8 @@ import Colors from "../constants/Colors";
 import { CartItem } from "../types";
 import { FontAwesome } from "@expo/vector-icons";
 import { useCart } from "@/app/providers/CartProvider";
+import RemoteImage from "./RemoteImage";
+import { defaultImage } from "./ProductList";
 // import RemoteImage from './RemoteImage';
 
 type CartListProps = {
@@ -15,8 +17,9 @@ const CartList = ({ cartItem }: CartListProps) => {
 
   return (
     <View className="bg-white rounded-lg p-2 flex-1 flex-row items-center">
-      <Image
-        source={{ uri: cartItem.product.image || undefined}}
+      <RemoteImage
+      path={cartItem.product.image}
+      fallback={defaultImage}
         resizeMode="contain"
         className="w-14 aspect-square self-center mr-3"
       />
