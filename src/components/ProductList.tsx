@@ -2,9 +2,13 @@ import { View, Text, Image, Pressable } from "react-native";
 import React from "react";
 import { Link, useSegments } from "expo-router";
 import { Tables } from "@/database.types";
+import RemoteImage from "./RemoteImage";
+
+export const defaultImage =
+  "https://www.recipesfromeurope.com/wp-content/uploads/2023/04/balkan-cevapi-recipe.jpg";
 
 type ProductListProps = {
-  product: Tables<'products'>;
+  product: Tables<"products">;
 };
 
 const ProductList = ({ product }: ProductListProps) => {
@@ -17,12 +21,9 @@ const ProductList = ({ product }: ProductListProps) => {
       asChild
     >
       <Pressable className="items-center bg-white p-5 rounded-lg flex-1">
-        <Image
-          source={{
-            uri:
-              product.image ||
-              "https://www.recipesfromeurope.com/wp-content/uploads/2023/04/balkan-cevapi-recipe.jpg",
-          }}
+        <RemoteImage
+          path={product.image}
+          fallback={defaultImage}
           className="w-full aspect-square rounded-full"
           resizeMode="contain"
         />

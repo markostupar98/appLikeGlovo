@@ -1,6 +1,6 @@
 import { useAuth } from "@/app/providers/AuthProvider";
 import { supabase } from "@/lib/supabase";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation  } from "@tanstack/react-query";
 import { InsertTables } from "@/types";
 // Create order
 

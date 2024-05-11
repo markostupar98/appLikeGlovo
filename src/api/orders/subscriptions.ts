@@ -1,10 +1,10 @@
 import { supabase } from "@/lib/supabase";
-import {  useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-const queryClient = useQueryClient();
-
 export const useOrderSubscription = () => {
+  const queryClient = useQueryClient();
+
   // Subscribe to changes
   useEffect(() => {
     const orderdSubscription = supabase

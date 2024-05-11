@@ -8,6 +8,8 @@ import { PizzaSize } from "@/types";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useProductById } from "@/api/products";
+import RemoteImage from "@/components/RemoteImage";
+import { defaultImage } from "@/components/ProductList";
 
 // Product details page
 
@@ -15,7 +17,6 @@ import { useProductById } from "@/api/products";
 const sizes: PizzaSize[] = ["Mala", "Srednja", "Velka", "Najveca"];
 
 const ProductDetail = () => {
-
   const { id: idString } = useLocalSearchParams();
   const id = parseFloat(typeof idString === "string" ? idString : idString[0]);
   // Fetching
@@ -62,9 +63,10 @@ const ProductDetail = () => {
         }}
       />
       <Stack.Screen options={{ title: product?.name }} />
-      <Image
+      <RemoteImage
+        path={product.image}
+        fallback={defaultImage}
         className="w-full aspect-square"
-        source={{ uri: product.image || 'https://www.recipesfromeurope.com/wp-content/uploads/2023/04/balkan-cevapi-recipe.jpg' }}
       />
 
       <Text className="text-xl font-semibold ml-2">${product?.price}</Text>

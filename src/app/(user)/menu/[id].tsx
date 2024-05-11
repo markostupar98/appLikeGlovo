@@ -6,6 +6,8 @@ import Button from "@/components/Button";
 import { useCart } from "@/app/providers/CartProvider";
 import { PizzaSize } from "@/types";
 import { useProductById, useProductList } from "@/api/products";
+import RemoteImage from "@/components/RemoteImage";
+import { defaultImage } from "@/components/ProductList";
 
 // Product details page
 
@@ -46,9 +48,10 @@ const ProductDetail = () => {
   return (
     <View className="bg-white flex-1 p-3">
       <Stack.Screen options={{ title: product?.name }} />
-      <Image
+      <RemoteImage
+      path={product.image}
+      fallback={defaultImage}
         className="w-full aspect-square"
-        source={{ uri: product.image || undefined }}
       />
       <Text>Select size</Text>
       <View className="flex-row justify-between my-2 items-center">
