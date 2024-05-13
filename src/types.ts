@@ -19,6 +19,14 @@ export type Product = {
   price: number;
 };
 
+export type Restaurant = {
+  id: number;
+  image: string | null;
+  name: string;
+  address: string;
+  phone:number
+};
+
 export type PizzaSize = "Mala" | "Srednja" | "Velka" | "Najveca";
 
 export type CartItem = {
