@@ -7,17 +7,21 @@ import * as ImagePicker from "expo-image-picker";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Button from "@/components/Button";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useCreateRestaurant, useDeleteRestaurant, useRestaurantById, useUpdateRestaurant } from "@/api/restaurants";
+import {
+  useCreateProduct,
+  useDeleteProduct,
+  useProductById,
+  useUpdateProduct,
+} from "@/api/products";
 import { randomUUID } from "expo-crypto";
 import { decode } from "base64-arraybuffer";
 import { supabase } from "@/lib/supabase";
 
 // Create product screen
 
-const CreateRestaurant = () => {
+const CreateProduct = () => {
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
+  const [price, setPrice] = useState("");
   const [errors, setErrors] = useState("");
   const [image, setImage] = useState<string | null>(null);
   const router = useRouter();
@@ -32,22 +36,21 @@ const CreateRestaurant = () => {
   //Image picker state
 
   // Create product fn
-  const { mutate: CreateRestaurant } = useCreateRestaurant();
+  const { mutate: createProduct } = useCreateProduct();
   // Update product fn
-  const { mutate: updateRestaurant } = useUpdateRestaurant();
+  const { mutate: updateProduct } = useUpdateProduct();
   // Get product by id
-  const { data: updatingRestaurant } = useRestaurantById(id);
+  const { data: updatingProduct } = useProductById(id);
   // Deleting product
-  const { mutate: deleteRestaurant } = useDeleteRestaurant();
+  const { mutate: deleteProduct } = useDeleteProduct();
 
   useEffect(() => {
-    if (updatingRestaurant) {
-      setName(updatingRestaurant.name);
-      setAddress(updatingRestaurant.address.toString());
-      setImage(updatingRestaurant.image);
-      setPhone(updatingRestaurant.phone)
+    if (updatingProduct) {
+      setName(updatingProduct.name);
+      setPrice(updatingProduct.price.toString());
+      setImage(updatingProduct.image);
     }
-  }, [updatingRestaurant]);
+  }, [updatingProduct]);
 
   // Image picker function
   const pickImage = async () => {
@@ -92,8 +95,7 @@ const CreateRestaurant = () => {
   // Field reset
   const resetFields = () => {
     setName("");
-    setAddress("");
-    setPhone('')
+    setPrice("");
   };
 
   // Input validation
@@ -103,12 +105,12 @@ const CreateRestaurant = () => {
       setErrors("Name is required");
       return false;
     }
-    if (!address) {
-      setErrors("address is required");
+    if (!price) {
+      setErrors("Price is required");
       return false;
     }
-    if (isNaN(parseFloat(phone))) {
-      setErrors("Please enter a number in phone field");
+    if (isNaN(parseFloat(price))) {
+      setErrors("Please enter a number in price field");
       return false;
     }
     return true;
@@ -127,7 +129,7 @@ const CreateRestaurant = () => {
 
     // Save in the database
     createProduct(
-      { name, address: parseFloat(address), image: imagePath },
+      { name, price: parseFloat(price), image: imagePath },
       {
         onSuccess: () => {
           resetFields();
@@ -145,7 +147,7 @@ const CreateRestaurant = () => {
     }
     const imagePath = await uploadImage()
     updateProduct(
-      { id, name, address: parseFloat(address), image:imagePath },
+      { id, name, price: parseFloat(price), image:imagePath },
       {
         onSuccess: () => {
           resetFields();
@@ -216,10 +218,10 @@ const CreateRestaurant = () => {
         placeholder="Name"
         className="bg-white p-3 rounded-lg my-3"
       />
-      <Text className="text-gray-400 text-xl">address ($)</Text>
+      <Text className="text-gray-400 text-xl">Price ($)</Text>
       <TextInput
-        value={address}
-        onChangeText={setAddress}
+        value={price}
+        onChangeText={setPrice}
         placeholder="9.99$"
         className="bg-white p-3 rounded-lg my-3"
         keyboardType="numeric"
@@ -243,4 +245,4 @@ const CreateRestaurant = () => {
   );
 };
 
-export default CreateRestaurant;
+export default CreateProduct;

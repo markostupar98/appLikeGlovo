@@ -14,16 +14,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import Search from "@/components/Search";
 import Categories from "@/components/Categories";
+import { useCategoryList } from "@/api/categories";
+import Featured from "@/components/Featured";
 
 export default function HomeScreen() {
-  // Product fetching
-  // const { data: products, error, isLoading } = useProductList();
-  // if (isLoading) {
-  //   return <ActivityIndicator />;
-  // }
-  // if (error) {
-  //   return <Text>Failed to get products</Text>;
-  // }
+  // Category fetching
+  const { data: categories, error, isLoading } = useCategoryList();
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+  if (error) {
+    return <Text>Failed to get products</Text>;
+  }
   return (
     <>
       {/* <FlatList
@@ -37,11 +39,18 @@ export default function HomeScreen() {
         {/* <StatusBar style="dark-content" /> */}
         {/* Search Bar */}
         <Search />
+        {/* Main */}
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 20 }}
         >
+          {/* Categories */}
           <Categories />
+          {/* Restaurants */}
+          <View className="mt-5">
+           
+           <Featured key={index} name={} />
+          </View>
         </ScrollView>
       </SafeAreaView>
     </>
